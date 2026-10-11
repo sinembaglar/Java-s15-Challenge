@@ -19,6 +19,13 @@ java -cp out Main
 
 Uygulama örnek verilerle açılır: 14 kitap (kitap, akademik dergi, magazin) ve 3 üye (2 öğrenci, 1 akademisyen).
 
+## Ekran görüntüsü
+
+Öğrenciye ve akademisyene kitap ödünç verme, ödünçteki kitabı başka üyeye verme denemesi, iade ve fatura geçmişi
+(menünün tekrarları kısaltılmıştır):
+
+<img src="docs/demo.png" alt="Konsolda ödünç verme, hata, iade ve fatura listesi" width="700">
+
 ## Özellikler
 
 | Menü | İşlem |
