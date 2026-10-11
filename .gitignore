@@ -1,0 +1,10 @@
+# IntelliJ derleme çıktısı
+out/
+*.class
+
+# Kişisel IDE ayarları
+.idea/workspace.xml
+.idea/shelf/
+
+# macOS
+.DS_Store
