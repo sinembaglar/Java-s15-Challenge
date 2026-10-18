@@ -1,73 +1,54 @@
 # Kütüphane Otomasyonu (Java OOP)
 
-Workintech S15 Challenge: Java ile nesne tabanlı tasarlanmış, konsoldan kullanılan bir kütüphane otomasyonu.
-Kütüphane görevlisi kitap ekleyip güncelleyebilir, arayabilir, silebilir; üyelere kitap ödünç verip iade alabilir.
-Ödünç verilen her kitap için fatura kesilir, kitap iade edilince ücret üyeye geri ödenir.
+Workintech S15 Challenge: Nesne tabanlı olarak tasarlanmış, konsoldan kullanılan bir kütüphane otomasyonu.
+Kütüphane görevlisi kitapları yönetir, üyelere ödünç verir ve fatura keser. Kitap iade edilince ücret üyeye geri ödenir.
+
+<img src="docs/demo.png" alt="Konsolda ödünç verme, hata, iade ve fatura listesi" width="700">
 
 ## Çalıştırma
 
-1. Projeyi IntelliJ IDEA ile açın (JDK 17 veya üstü).
-2. `src/Main.java` dosyasını çalıştırın.
-3. Kütüphaneci şifresi: **`1234`**
-
-Terminalden çalıştırmak için:
+IntelliJ IDEA ile projeyi açıp `src/Main.java` dosyasını çalıştırın (JDK 17 veya üstü). Terminalden:
 
 ```bash
 javac -encoding UTF-8 -d out $(find src -name "*.java")
 java -cp out Main
 ```
 
-Uygulama örnek verilerle açılır: 14 kitap (kitap, akademik dergi, magazin) ve 3 üye (2 öğrenci, 1 akademisyen).
+Kütüphaneci şifresi **`1234`**. Uygulama örnek verilerle açılır: 14 yayın ve 3 üye.
 
-## Ekran görüntüsü
+## İsterler
 
-Öğrenciye ve akademisyene kitap ödünç verme, ödünçteki kitabı başka üyeye verme denemesi, iade ve fatura geçmişi
-(menünün tekrarları kısaltılmıştır):
+**Tasarım**
 
-<img src="docs/demo.png" alt="Konsolda ödünç verme, hata, iade ve fatura listesi" width="700">
-
-## Özellikler
-
-| Menü | İşlem |
+| İster | Projede karşılığı |
 |---|---|
-| 1 | Tüm kitapları listele |
-| 2 | Yeni kitap ekle (tür, ad, yazar, fiyat, baskı, kategori) |
-| 3 | Kitap seç: id, isim veya yazara göre (büyük/küçük harf duyarsız, kısmi eşleşme) |
-| 4 | Kitap bilgilerini güncelle (boş bırakılan alan değişmez) |
-| 5 | Kitap sil (ödünçteki kitap silinemez) |
-| 6 | Bir kategorideki tüm kitapları listele |
-| 7 | Bir yazarın tüm kitaplarını listele |
-| 8 | Kitap ödünç ver ve fatura kes |
-| 9 | Kitap iade al ve ücreti geri öde |
-| 10 | Ödünçteki kitapları ve kimde olduklarını listele |
-| 11 / 12 | Üyeleri listele / yeni üye ekle |
-| 13 | Fatura geçmişi |
+| En az 10 sınıf | 17 sınıf, 1 arayüz, 2 enum |
+| Hiyerarşinin çizili gösterimi | Aşağıdaki sınıf diyagramı |
+| Anlamlı paketler | `model`, `service`, `ui`, `data`, `exception` |
+| Encapsulation | Alanlar `private` (tek istisna `MAX_BOOK_LIMIT` sabiti), değişmemesi gerekenler `final`. Koleksiyonlar dışarıya salt okunur verilir. |
+| Composition | Her `Reader` kendi `MemberRecord` nesnesini oluşturur, kayıt okuyucudan ayrı yaşamaz. |
+| Inheritance | `Person` → `Author`, `Reader`, `Librarian` · `Reader` → `Student`, `Faculty` · `Book` → `StudyBook`, `Journal`, `Magazine` |
+| Abstract class / Interface | Abstract: `Person`, `Reader`, `Book` · Interface: `Displayable` |
+| Polymorphism | Ödünç ücreti üye türüne göre farklı indirimle hesaplanır (`getDiscountRate()`). Kitap, üye ve fatura listeleri tek bir metotla yazdırılır. |
+| List | Arama sonuçları ve fatura geçmişi |
+| Set | Bir üyedeki ve bir yazardaki kitaplar: aynı kitap iki kez yer alamaz. |
+| Map | Kitaplar, üyeler, yazarlar ve aktif faturalar `Library` içinde Map'lerde saklanır. |
 
-**Kurallar**
+**İşlevler** (konsol menüsü, `Scanner` ile)
 
-- Kitap ancak raftaysa (başka bir üyede değilse) ödünç verilebilir. Kitabın hangi üyede olduğu tutulur.
-- Her üyenin **en fazla 5 kitap** limiti vardır. Limit dolunca yeni kitap alamaz.
-- Ödünç ücreti kitap fiyatı üzerinden hesaplanır: **öğrenciler %50, akademisyenler %20 indirim** alır.
-- İade edilince fatura "iade edildi" olarak işaretlenir ve aynı tutar üyeye geri ödenir.
-- Hatalı girişler (harf yerine sayı, boş alan, geçersiz menü seçimi) programı çökertmez, tekrar sorulur.
+| İster | Menü |
+|---|---|
+| Yeni kitap ekleme | 2 |
+| Id, isim veya yazara göre kitap seçme | 3 |
+| Kitap bilgilerini güncelleme | 4 |
+| Kitap silme (ödünçteki kitap silinemez) | 5 |
+| Bir kategorideki kitapları listeleme | 6 |
+| Bir yazarın kitaplarını listeleme | 7 |
+| Ödünç verme: kitap rafta değilse verilmez, kimde olduğu tutulur, fatura kesilir | 8, 10 |
+| İade alma ve ücreti geri ödeme | 9 |
+| 5 kitap limiti | 8 |
 
-## Paket yapısı
-
-```
-src
-├── Main.java                         Uygulamanın giriş noktası
-└── com/workintech/library
-    ├── model
-    │   ├── Displayable.java          Konsola yazdırılabilen nesneler için arayüz
-    │   ├── book                      Book (abstract), StudyBook, Journal, Magazine, Category, BookStatus
-    │   ├── person                    Person (abstract), Author, Reader (abstract), Student, Faculty, Librarian
-    │   ├── member                    MemberRecord (üyelik kaydı ve 5 kitap limiti)
-    │   └── billing                   Bill (fatura)
-    ├── service                       Library: veri saklama ve tüm iş kuralları
-    ├── exception                     LibraryException
-    ├── data                          SampleData: başlangıç verileri
-    └── ui                            ConsoleMenu: Scanner ile menü
-```
+Öğrenciler %50, akademisyenler %20 indirimli öder. Hatalı girişler (sayı yerine harf, boş alan, geçersiz seçim) programı çökertmez.
 
 ## Sınıf diyagramı
 
@@ -77,121 +58,21 @@ classDiagram
 
     class Displayable {
         <<interface>>
-        +display()
     }
-
     class Person {
         <<abstract>>
-        -String name
-        +whoYouAre()* String
-    }
-    class Author {
-        -Set~Book~ books
-        +newBook(Book)
-        +removeBook(Book)
-        +showBooks()
     }
     class Reader {
         <<abstract>>
-        -MemberRecord record
-        -Set~Book~ borrowedBooks
-        +getDiscountRate()* double
-        +calculateFee(Book) double
-        +canBorrow() boolean
-        +borrowBook(Book)
-        +returnBook(Book)
-        +showBooks()
     }
-    class Student {
-        +getDiscountRate() double
-    }
-    class Faculty {
-        +getDiscountRate() double
-    }
-    class Librarian {
-        -String password
-        +checkPassword(String) boolean
-    }
-    class MemberRecord {
-        +int MAX_BOOK_LIMIT$
-        -long memberId
-        -String type
-        -LocalDate dateOfMembership
-        -int noBooksIssued
-        -String address
-        -String phoneNo
-        -double totalPaid
-        +incBookIssued()
-        +decBookIssued()
-        +payBill(double)
-        +receiveRefund(double)
-    }
-
     class Book {
         <<abstract>>
-        -long id
-        -String title
-        -Author author
-        -double price
-        -BookStatus status
-        -int edition
-        -LocalDate dateOfPurchase
-        -Category category
-        -Reader owner
-        +getType()* String
-        +changeOwner(Reader)
-        +getOwner() Reader
-        +updateStatus(BookStatus)
     }
-    class StudyBook
-    class Journal
-    class Magazine
     class Category {
         <<enumeration>>
-        NOVEL
-        HISTORY
-        SCIENCE
-        PHILOSOPHY
-        TECHNOLOGY
-        CHILDREN
-        ART
     }
     class BookStatus {
         <<enumeration>>
-        AVAILABLE
-        BORROWED
-    }
-
-    class Bill {
-        -long id
-        -Reader reader
-        -Book book
-        -double amount
-        -LocalDateTime issuedAt
-        -LocalDateTime refundedAt
-        +markRefunded()
-    }
-
-    class Library {
-        -Map~Long, Book~ books
-        -Map~Long, Reader~ readers
-        -Map~String, Author~ authors
-        -Map~Long, Bill~ activeBills
-        -List~Bill~ bills
-        +newBook(Book)
-        +getBook(long) Book
-        +searchByTitle(String) List~Book~
-        +searchByAuthor(String) List~Book~
-        +updateBook(...)
-        +removeBook(long)
-        +getBooksByCategory(Category) List~Book~
-        +lendBook(long, long) Bill
-        +takeBackBook(long, long) Bill
-    }
-    class ConsoleMenu {
-        -Library library
-        -Scanner scanner
-        +start()
     }
 
     Person <|-- Author
@@ -208,32 +89,28 @@ classDiagram
     Displayable <|.. Bill
 
     Reader *-- MemberRecord : composition
+    Book --> Author
+    Book --> Reader : ödünç alan
+    Book --> Category
+    Book --> BookStatus
+    Bill --> Reader
+    Bill --> Book
+
     Library o-- Book
     Library o-- Reader
     Library o-- Author
     Library o-- Bill
     Library --> Librarian
-    Book --> Author
-    Book --> Category
-    Book --> BookStatus
-    Book --> Reader : owner
-    Bill --> Reader
-    Bill --> Book
     ConsoleMenu --> Library
 ```
 
-## OOP gereksinimleri nerede karşılandı?
+## Paket yapısı
 
-| Gereksinim | Projede karşılığı |
-|---|---|
-| En az 10 sınıf | 17 sınıf, 1 arayüz ve 2 enum (yukarıdaki diyagram) |
-| Anlamlı paketler | `model`, `service`, `ui`, `data`, `exception` |
-| Encapsulation | Tüm alanlar `private`. Değişmemesi gerekenler (`id`, `dateOfPurchase`, `memberId`) `final` ve setter'ı yok. Koleksiyonlar dışarıya `Collections.unmodifiable...` ile verilir. |
-| Composition | Her `Reader`, kendi `MemberRecord` nesnesini constructor içinde oluşturur. Kayıt okuyucudan ayrı yaşamaz. |
-| Inheritance | `Person` → `Author`, `Reader`, `Librarian`; `Reader` → `Student`, `Faculty`; `Book` → `StudyBook`, `Journal`, `Magazine` |
-| Abstract class / Interface | Abstract: `Person`, `Reader`, `Book`. Interface: `Displayable` (`Book`, `Reader`, `Bill` uygular). |
-| Polymorphism | `calculateFee()` üye türüne göre farklı indirim uygular (`getDiscountRate()`). `whoYouAre()` ve `getType()` her alt sınıfta farklıdır. `ConsoleMenu.printAll(Collection<? extends Displayable>)` kitap, üye ve fatura listelerini tek metodla yazdırır. |
-| List | Arama ve listeleme sonuçları, fatura geçmişi (`List<Bill>`) |
-| Set | `Reader.borrowedBooks` ve `Author.books`: aynı kitap bir üyede veya yazarda iki kez görünemez (`Book.equals/hashCode` id üzerinden). |
-| Map | Kitaplar, üyeler, yazarlar ve aktif faturalar `Library` içinde Map'lerde saklanır. |
-| Konsol uygulaması | `Scanner` ile menü (`ConsoleMenu`) |
+```
+src/com/workintech/library
+├── model       Book, Person ve alt sınıfları, MemberRecord, Bill, Displayable
+├── service     Library: veriler ve bütün iş kuralları
+├── ui          ConsoleMenu: konsol menüsü
+├── data        SampleData: başlangıç verileri
+└── exception   LibraryException
+```
